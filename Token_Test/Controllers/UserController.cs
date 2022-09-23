@@ -3,7 +3,10 @@ using Login_Test.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Token_Test.Models;
+using Token_Test.Services;
 
 namespace Token_Test.Controllers
 {
@@ -11,13 +14,39 @@ namespace Token_Test.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        [HttpGet]
-        [Authorize]
+        private readonly AppDbContext _dbCtx;
+
+        public UserController(AppDbContext appDbContext)
+        {
+            _dbCtx = appDbContext;
+        }
+
+        [HttpGet("admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult AdminsEndpoint()
         {
-            var curUser = GetCurrentUser();
+            return Ok(Greeting());
+        }
 
-            return Ok($"Hi {curUser.GivenName}, you are an {curUser.Role}");
+        [HttpGet("seller")]
+        [Authorize(Roles = "Seller, Admin")]
+        public IActionResult SellersEndpoint()
+        {
+            return Ok(Greeting());
+        }
+
+        [HttpGet("products")]
+        [Authorize(Roles = "Seller, Admin")]
+        public IActionResult ListProducts()
+        {
+            DbSet<Product> products = _dbCtx.Products;
+
+            if (products == null)
+            {
+                return BadRequest("Resource empty or not found.");
+            }
+
+            return Ok(products);
         }
 
         [AllowAnonymous]
@@ -46,6 +75,13 @@ namespace Token_Test.Controllers
                 };
             }
             return null;
+        }
+
+        private string Greeting()
+        {
+            var curUser = GetCurrentUser();
+            
+            return $"Hi {curUser.GivenName}, you are an {curUser.Role}"; 
         }
     }
 }

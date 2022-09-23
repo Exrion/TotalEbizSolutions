@@ -8,6 +8,8 @@ using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.EntityFrameworkCore;
+using Token_Test.Services;
 
 namespace Login_Test.Controllers
 {
@@ -16,9 +18,11 @@ namespace Login_Test.Controllers
     public class LoginApiController : ControllerBase
     {
         private IConfiguration _config;
+        private AppDbContext _dbCtx;
 
-        public LoginApiController(IConfiguration config)
+        public LoginApiController(IConfiguration config, AppDbContext appDbContext)
         {
+            _dbCtx = appDbContext;
             _config = config;
         }
 
@@ -71,9 +75,13 @@ namespace Login_Test.Controllers
 
         private User Authenticate(UserDTO userDTO)
         {
-            var curUser = UserConstants.Users.FirstOrDefault(
+            User? curUser = _dbCtx.Users
+                .Where(u => u.UserName.ToLower() == userDTO.UserName.ToLower() &&
+                            u.Password == userDTO.Password)
+                .FirstOrDefault();
+            /*var curUser = UserConstants.Users.FirstOrDefault(
                 o => o.UserName.ToLower() == userDTO.UserName.ToLower() &&
-                o.Password == userDTO.Password);
+                o.Password == userDTO.Password);*/
 
             if (curUser != null)
             {
