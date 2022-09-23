@@ -36,7 +36,7 @@ namespace Token_Test.Controllers
         }
 
         [HttpGet("products")]
-        [Authorize(Roles = "Seller, Admin")]
+        [AllowAnonymous]
         public IActionResult ListProducts()
         {
             DbSet<Product> products = _dbCtx.Products;

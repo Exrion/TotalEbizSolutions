@@ -24,7 +24,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventureWorksAPI", "Advent
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Token Sandbox", "Token Sandbox", "{D9465DD7-39E7-455B-97AB-562009EE4AA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Token_Test", "Token_Test\Token_Test.csproj", "{7FE258B9-08C4-400D-B99F-DF3994E0E992}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Token_Test", "Token_Test\Token_Test.csproj", "{7FE258B9-08C4-400D-B99F-DF3994E0E992}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "react_token_test", "React_Token_Test\react_token_test.esproj", "{41775A7D-C446-48DA-B577-C325DDD75943}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +54,12 @@ Global
 		{7FE258B9-08C4-400D-B99F-DF3994E0E992}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FE258B9-08C4-400D-B99F-DF3994E0E992}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FE258B9-08C4-400D-B99F-DF3994E0E992}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41775A7D-C446-48DA-B577-C325DDD75943}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41775A7D-C446-48DA-B577-C325DDD75943}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41775A7D-C446-48DA-B577-C325DDD75943}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{41775A7D-C446-48DA-B577-C325DDD75943}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41775A7D-C446-48DA-B577-C325DDD75943}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41775A7D-C446-48DA-B577-C325DDD75943}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,6 +74,7 @@ Global
 		{60726202-BB2E-4816-B695-DBE701527629} = {0730D993-A63B-432B-9FE9-EAEE8172D5A4}
 		{D9465DD7-39E7-455B-97AB-562009EE4AA3} = {BE875889-023B-42C0-A1F3-684B376A0F5B}
 		{7FE258B9-08C4-400D-B99F-DF3994E0E992} = {D9465DD7-39E7-455B-97AB-562009EE4AA3}
+		{41775A7D-C446-48DA-B577-C325DDD75943} = {D9465DD7-39E7-455B-97AB-562009EE4AA3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8F1918B7-392F-4108-9813-7CC6597FE310}
