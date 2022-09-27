@@ -10,10 +10,12 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Token_Test.Services;
+using Microsoft.AspNetCore.Cors;
 
 namespace Login_Test.Controllers
 {
-    [Route("api/login")]
+    [EnableCors("_allowedOrigins")]
+    [Route("api/account")]
     [ApiController]
     public class LoginApiController : ControllerBase
     {
@@ -36,7 +38,8 @@ namespace Login_Test.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Login([FromBody] UserDTO userDTO)
+        [Route("login")]
+        public IActionResult Login(UserLoginDTO userDTO)
         {
             var user = Authenticate(userDTO);
 
@@ -46,7 +49,62 @@ namespace Login_Test.Controllers
                 return Ok(token);
             }
 
-            return NotFound("User not found");
+            return NotFound("Username or Password incorrect");
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("register")]
+        public IActionResult Register(UserRegisterDTO newUserDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Model invalid");
+            }
+            else
+            {
+                //Check for duplicate email
+                User? dupeUserEmail = _dbCtx.Users
+                    .Where(u => u.Email.ToLower().Equals(newUserDTO.Email.ToLower()))
+                    .FirstOrDefault();
+
+                //Check for duplicate username (case sensitive)
+                User? dupeUserUsername = _dbCtx.Users
+                    .Where(u => u.UserName.Equals(newUserDTO.UserName))
+                    .FirstOrDefault();
+
+                if (dupeUserEmail == null && dupeUserUsername == null)
+                {
+                    //Convert model
+                    User newUser = new()
+                    {
+                        UserName = newUserDTO.UserName,
+                        Email = newUserDTO.Email,
+                        Password = newUserDTO.Password,
+                        GivenName = newUserDTO.GivenName,
+                        Surname = newUserDTO.Surname,
+                        Role = newUserDTO.Role
+                    };
+
+                    //Retrieve dbset and save changes
+                    DbSet<User> users = _dbCtx.Users;
+                    users.Add(newUser);
+
+                    switch (_dbCtx.SaveChanges())
+                    {
+                        case 0: 
+                            return BadRequest("Unable to register");
+                        case 1:
+                            return Ok("Registration Successful");
+                    }
+                }
+                else
+                {
+                    return BadRequest("Duplicate username and/or email");
+                }
+
+                return BadRequest("Unknown Error");
+            }
         }
 
         private object Generate(User user)
@@ -73,10 +131,10 @@ namespace Login_Test.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private User Authenticate(UserDTO userDTO)
+        private User Authenticate(UserLoginDTO userDTO)
         {
             User? curUser = _dbCtx.Users
-                .Where(u => u.UserName.ToLower() == userDTO.UserName.ToLower() &&
+                .Where(u => u.UserName == userDTO.UserName &&
                             u.Password == userDTO.Password)
                 .FirstOrDefault();
             /*var curUser = UserConstants.Users.FirstOrDefault(

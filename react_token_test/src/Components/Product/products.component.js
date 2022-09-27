@@ -1,7 +1,8 @@
-function products() {
+const products = () => {
     return (
-        <>
-        </>
+        <div>
+            
+        </div>
     );
 }
 

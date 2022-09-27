@@ -1,4 +1,4 @@
-import { Sidebar, Footer } from 'flowbite-react';
+import { Sidebar, Footer, Modal } from 'flowbite-react';
 import React, { useState } from 'react';
 import { json, Link } from 'react-router-dom';
 import './App.css';
@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 
 //Components
-import login from './Components/Account/login.component';
+import Login from './Components/Account/login.component';
 import Account from './Components/Account/account.component';
 import Home from './Components/Main/home.component';
 import Products from './Components/Product/products.component';
@@ -17,93 +17,51 @@ import Products from './Components/Product/products.component';
 import { FaUser, FaHome, FaShoppingBasket } from 'react-icons/fa';
 
 function App() {
-  //API
-  const apiUrl = 'https://localhost:44394';
-
-  const [message, setMessage] = useState('');
-
-  //Register Form
-  //#region Register
-  const [usernameRegister, setUsernameRegister] = useState('');
-  const [passwordRegister, setPasswordRegister] = useState('');
-  const [GivenNameRegister, setGivenNameRegister] = useState('');
-  const [SurnameRegister, setSurnameRegister] = useState('');
-  const [EmailRegister, setEmailRegister] = useState('');
-
-  let handleSubmitRegister = async (e) => {
-    e.preventDefault();
-    try {
-      let resLogin = fetch(apiUrl, {
-        method: "POST",
-        body: JSON.stringify({
-          UserName: usernameRegister,
-          Password: passwordRegister,
-          GivenName: GivenNameRegister,
-          Surname: SurnameRegister,
-          Email: EmailRegister,
-          Role: 'Seller'
-        })
-      });
-      let resJsonLogin = await resLogin.json();
-      if (resLogin.status === 200) {
-        setUsernameRegister('');
-        setPasswordRegister('');
-        localStorage.setItem('authToken', resJsonLogin.parse().token)
-        setMessage('Login Successful');
-      }
-      else {
-        setMessage('Login Unsuccessful');
-      }
-    }
-    catch (e) {
-      console.log(e);
-    }
-  };
-  //#endregion
-
-  //Login Form
-  //#region Login
-  const [usernameLogin, setUsernameLogin] = useState('');
-  const [passwordLogin, setPasswordLogin] = useState('');
-
-  let handleSubmitLogin = async (e) => {
-    e.preventDefault();
-    try {
-      let resLogin = fetch(apiUrl, {
-        method: "POST",
-        body: JSON.stringify({
-          UserName: usernameLogin,
-          Password: usernameLogin
-        })
-      });
-      let resJsonLogin = await resLogin.json();
-      if (resLogin.status === 200) {
-        setUsernameLogin('');
-        setPasswordLogin('');
-        setMessage('Login Successful');
-      }
-      else {
-        setMessage('Login Unsuccessful');
-      }
-    }
-    catch (e) {
-      console.log(e);
-    }
-  };
-  //#endregion
+  const [showModal, setShowModal] = useState(false);
 
   //#region Functions
-  const handleWelcome = () => {
+  //#region Account Modal
+  const handleAccount = () => {
     if (checkToken()) {
-      return (`Welcome, ${usernameLogin}`);
+      return (
+        <Link to="/account">
+          <Sidebar.Item icon={FaUser}>
+            {/* Account */}
+            Account
+          </Sidebar.Item>
+        </Link>
+      );
     }
     else {
-      return (`Welcome Guest`);
+      return (
+        <React.Fragment>
+          <Sidebar.Item icon={FaUser}>
+            {/* Account */}
+            <button onClick={() => setShowModal(true)}>
+              Login or Register
+            </button>
+          </Sidebar.Item>
+          <Modal
+            show={showModal}
+            onClose={() => setShowModal(false)}
+          >
+            <Modal.Header>
+              <h3 className="text-xl font-medium">
+                Login or Register
+              </h3>
+            </Modal.Header>
+            <Modal.Body>
+              <Login/>
+            </Modal.Body>
+          </Modal>
+        </React.Fragment>
+      );
     }
   }
+  //#endregion
 
   const checkToken = () => {
-    if (localStorage.getItem('authToken') === "" || localStorage.getItem('authToken') === null) {
+    if (localStorage.getItem('authToken') == "" || localStorage.getItem('authToken') == null) {
       console.log('no token');
       return false;
     }
@@ -116,13 +74,13 @@ function App() {
   //#endregion
 
   return (
-    <div className="App" class="container w-full h-full">
-      <div class="flex h-full">
-        <div class="flex flex-col justify-between h-full">
+    <div className="App container w-full h-full">
+      <div className="flex h-full">
+        <div className="flex flex-col justify-between h-full shadow">
           <Sidebar>
             <Sidebar.Items>
               <Sidebar.ItemGroup>
-                <p CLASS="p-2 text-xl">Welcome [TEMP]</p>
+                <p className="p-2 text-xl">Not Amazon.com</p>
               </Sidebar.ItemGroup>
               <Sidebar.ItemGroup>
                 <Link to="/">
@@ -144,12 +102,7 @@ function App() {
             <Sidebar>
               <Sidebar.Items>
                 <Sidebar.ItemGroup>
-                  <Link to="/account">
-                    <Sidebar.Item icon={FaUser}>
-                      {/* Account */}
-                      Login or Register
-                    </Sidebar.Item>
-                  </Link>
+                  {handleAccount()}
                 </Sidebar.ItemGroup>
               </Sidebar.Items>
             </Sidebar>
@@ -162,12 +115,12 @@ function App() {
             </Footer>
           </div>
         </div>
-        <div class="w-full">
-          <main>
+        <div className="w-full">
+          <main className="p-6">
             <Routes>
-              <Route exact path='/account' element={<Account/>} />
-              <Route exact path='/' element={<Home/>} />
-              <Route exact path='/products' element={<Products/>} />
+              <Route exact path='/account' element={<Account />} />
+              <Route exact path='/' element={<Home />} />
+              <Route exact path='/products' element={<Products />} />
             </Routes>
           </main>
         </div>

@@ -1,11 +1,12 @@
-import React from "react";
+import { React, Component } from "react";
 
 const home = () => {
     return (
-        <>
-            <h1 class="text-9xl">Home</h1>
-            poop
-        </>
+        <div className="space-y-2">
+            <h1 className="text-right text-2xl font-bold">Dashboard</h1>
+            <hr/>
+            {localStorage.getItem('authToken')}
+        </div>
     );
 }
 

@@ -15,6 +15,21 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//CORS
+var AllowedOrigins = "_allowedOrigins";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        name: AllowedOrigins,
+        policy =>
+        {
+            policy.WithOrigins("*");
+            policy.WithHeaders("*");
+            //policy.AllowAnyOrigin();
+        });
+});
+
 builder.Services.AddMvc();
 builder.Services.AddControllers();
 builder.Services.AddRazorPages();
@@ -24,7 +39,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidateAudience = true, 
+            ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
@@ -46,6 +61,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(AllowedOrigins);
 
 app.UseAuthentication();
 app.UseAuthorization();

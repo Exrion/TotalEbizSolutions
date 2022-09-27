@@ -1,6 +1,7 @@
 ﻿using Login_Test.Models;
 using Login_Test.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Token_Test.Services;
 
 namespace Token_Test.Controllers
 {
+    [EnableCors("_allowedOrigins")]
     [Route("api/user")]
     [ApiController]
     public class UserController : ControllerBase
