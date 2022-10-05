@@ -1,6 +1,6 @@
 import { React, useState } from 'react';
 
-const Products = ({products}) => {
+const Product = (product) => {
     return (
         <div className="space-y-2">
             
@@ -9,4 +9,4 @@ const Products = ({products}) => {
 
 }
 
-export default Products;
+export default Product;

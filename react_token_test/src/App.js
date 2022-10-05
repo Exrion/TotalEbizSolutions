@@ -12,7 +12,7 @@ import {
 import Login from './Components/Account/login.component';
 import Account from './Components/Account/account.component';
 import Home from './Components/Main/home.component';
-import Products from './Components/Product/products.component';
+import _products from './Components/Product/_products.components';
 
 import { FaUser, FaHome, FaShoppingBasket } from 'react-icons/fa';
 
@@ -120,7 +120,7 @@ function App() {
             <Routes>
               <Route exact path='/account' element={<Account />} />
               <Route exact path='/' element={<Home />} />
-              <Route exact path='/products' element={<Products />} />
+              <Route exact path='/products' element={<_products />} />
             </Routes>
           </main>
         </div>

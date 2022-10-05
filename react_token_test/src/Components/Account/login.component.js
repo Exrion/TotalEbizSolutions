@@ -1,4 +1,4 @@
-import React, { useState, Component } from 'react';
+import { React, useState } from 'react';
 import { Label, Tabs, TextInput, Button, Alert } from 'flowbite-react';
 
 const Login = () => {
