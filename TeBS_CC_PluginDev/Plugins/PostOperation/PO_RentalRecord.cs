@@ -256,7 +256,7 @@ namespace TeBS_CC_PluginDev.Plugins.PostOperation
                             "d-112daae2df47449384fbbe02e3aa8bf4",
                             templateData);*/
 
-                        string _apiKey = "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";
+                        string _apiKey = "";
                         SendGridClient client = new SendGridClient(_apiKey);
 
                         EmailModel templateData = new EmailModel()
